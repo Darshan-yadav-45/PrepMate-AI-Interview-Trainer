@@ -229,3 +229,4 @@ class InterviewSessionModel:
             return cur.rowcount > 0
         finally:
             conn.close()
+

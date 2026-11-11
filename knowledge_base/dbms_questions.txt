@@ -22,3 +22,4 @@ Key Concepts: Structured schema, ACID vs BASE, Vertical scaling vs Horizontal sc
 Evaluation Criteria:
 - RDBMS: Strict schema, ACID compliance, complex relational joins, ideal for financial/e-commerce core transactions.
 - NoSQL: Flexible dynamic schema, high write throughput, horizontal partition scaling, ideal for big data, real-time analytics, session stores.
+

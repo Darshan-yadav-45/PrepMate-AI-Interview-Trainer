@@ -31,3 +31,4 @@ Evaluation Criteria:
 - CTE enhances readability and modularity of complex multi-step queries.
 - Recursive CTEs enable traversal of hierarchical and graph structures (e.g., employee-manager hierarchy).
 - Subqueries can be correlated or uncorrelated; CTEs are often treated similarly by modern optimizers.
+

@@ -22,3 +22,4 @@ Key Concepts: Creational patterns, Singleton (single instance, global point of a
 Evaluation Criteria:
 - Singleton: Ensures only one instance exists. Pitfall: Acts like global mutable state, complicates unit testing/mocking.
 - Factory: Decouples object creation from client code, adhering to Open/Closed principle.
+

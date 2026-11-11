@@ -251,3 +251,4 @@ def test_responsive_meta_tags(client):
         assert resp.status_code == 200
         html = resp.data.decode('utf-8')
         assert '<meta name="viewport" content="width=device-width, initial-scale=1.0">' in html
+

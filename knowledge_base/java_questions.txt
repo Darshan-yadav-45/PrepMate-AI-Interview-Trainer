@@ -39,3 +39,4 @@ Evaluation Criteria:
 - Mentions functional programming support with lambdas.
 - Distinguishes Streams (pipeline for data processing, lazy evaluation) from Collections (data structure).
 - Explains Optional to avoid NullPointerExceptions.
+

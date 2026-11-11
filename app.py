@@ -522,3 +522,4 @@ def api_delete_history(session_id: int):
 if __name__ == '__main__':
     print(f"Starting PrepMate AI on http://localhost:{config.PORT}")
     app.run(host='0.0.0.0', port=config.PORT, debug=config.DEBUG)
+

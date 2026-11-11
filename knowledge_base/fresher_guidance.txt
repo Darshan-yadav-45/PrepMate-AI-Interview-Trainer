@@ -13,3 +13,4 @@ Key Points:
 2. Your specific contribution: Clearly identify what YOU wrote versus what third-party libraries or team members contributed.
 3. Trade-offs and decisions: Be prepared to explain why you chose technology X over technology Y (e.g., SQLite vs PostgreSQL, Flask vs Express).
 4. Edge cases & scalability: What happens if 10,000 users access the application simultaneously? How would you optimize queries, cache data, or handle authentication?
+

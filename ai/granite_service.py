@@ -273,3 +273,4 @@ class GraniteService:
 
 # Global singleton instance
 granite_service = GraniteService()
+

@@ -551,3 +551,4 @@ document.addEventListener("DOMContentLoaded", () => {
   initAnswerEvaluator();
   initMockInterview();
 });
+

@@ -29,3 +29,4 @@ Evaluation Criteria:
 - Demonstrates realistic ambition: evolving from a proficient contributor to a domain expert or mentor.
 - Reflects commitment to learning emerging technologies (Cloud, AI, Microservices).
 - Shows mutual benefit for both the candidate's development and company impact.
+
