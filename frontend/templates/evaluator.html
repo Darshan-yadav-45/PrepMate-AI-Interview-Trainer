@@ -1,0 +1,188 @@
+{% extends "base.html" %}
+
+{% block title %}AI Answer Evaluator - PrepMate{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row g-4">
+    
+    <!-- Left Column: Input Form -->
+    <div class="col-lg-6">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="fw-bold mb-0"><i class="bi bi-check2-circle text-primary me-2"></i>AI Answer Evaluator</h3>
+        <span class="badge bg-primary-subtle text-primary border border-primary-subtle p-2">Module 4</span>
+      </div>
+      <p class="text-muted small">
+        Submit your spoken or written interview answer. IBM Granite evaluates technical depth, precision, and clarity against industry benchmarks.
+      </p>
+
+      <div id="evalAlertContainer"></div>
+
+      <div class="card card-custom p-4">
+        <form id="answerEvalForm">
+          <div class="mb-3">
+            <label for="evalJobRole" class="form-label fw-semibold">Target Job Role</label>
+            <input type="text" class="form-control" id="evalJobRole" 
+                   value="{{ profile.target_role if profile else 'Software Development Engineer' }}" 
+                   placeholder="e.g. Full Stack Developer, Data Engineer">
+          </div>
+
+          <div class="mb-3">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <label for="evalQuestion" class="form-label fw-semibold mb-0">Interview Question <span class="text-danger">*</span></label>
+              <button type="button" class="btn btn-sm btn-link text-decoration-none p-0" id="presetQuestionBtn" onclick="loadSampleQuestion()">
+                Load Sample Question
+              </button>
+            </div>
+            <textarea class="form-control" id="evalQuestion" rows="2" 
+                      placeholder="e.g. Explain the difference between Method Overloading and Method Overriding in Java." required></textarea>
+          </div>
+
+          <div class="mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <label for="evalAnswer" class="form-label fw-semibold mb-0">Your Answer <span class="text-danger">*</span></label>
+              <span class="small text-muted" id="charCount">0 words</span>
+            </div>
+            <textarea class="form-control" id="evalAnswer" rows="6" 
+                      placeholder="Type your complete answer here. Mention definitions, mechanisms, and examples..." required></textarea>
+            <small class="text-muted">Tip: Answer as if speaking directly to an engineering interviewer.</small>
+          </div>
+
+          <button type="submit" class="btn btn-primary-custom w-100 py-2">
+            <i class="bi bi-lightning-charge-fill me-2"></i>Evaluate with IBM Granite
+          </button>
+        </form>
+      </div>
+
+      <!-- Responsible AI Guideline -->
+      <div class="responsible-ai-banner mt-3">
+        <h6 class="fw-bold mb-1"><i class="bi bi-shield-check text-primary me-1"></i> Responsible AI Evaluation</h6>
+        <p class="small text-muted mb-0">
+          In accordance with responsible AI standards, PrepMate provides qualitative diagnostic feedback and coaching recommendations rather than arbitrary percentage scores, keeping student learning constructive and transparent.
+        </p>
+      </div>
+    </div>
+
+    <!-- Right Column: Evaluation Results -->
+    <div class="col-lg-6">
+      <div id="evaluationResultCard" style="display: none;">
+        
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h4 class="fw-bold mb-0">IBM Granite Evaluation</h4>
+          <span id="evalModelBadge" class="badge badge-granite">IBM Granite</span>
+        </div>
+
+        <!-- 4-Dimension Metric Cards -->
+        <div class="row g-2 mb-3">
+          <div class="col-6">
+            <div class="eval-metric-card relevance">
+              <span class="small fw-bold text-uppercase text-secondary">Relevance</span>
+              <p class="small mb-0 text-dark" id="evalRelevance">-</p>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="eval-metric-card correctness">
+              <span class="small fw-bold text-uppercase text-success">Technical Correctness</span>
+              <p class="small mb-0 text-dark" id="evalCorrectness">-</p>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="eval-metric-card clarity">
+              <span class="small fw-bold text-uppercase text-primary">Clarity & Structure</span>
+              <p class="small mb-0 text-dark" id="evalClarity">-</p>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="eval-metric-card completeness">
+              <span class="small fw-bold text-uppercase" style="color: #8a3ffc;">Completeness</span>
+              <p class="small mb-0 text-dark" id="evalCompleteness">-</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Overall Feedback Card -->
+        <div class="card card-custom p-3 mb-3">
+          <h6 class="fw-bold text-dark mb-2"><i class="bi bi-chat-quote-fill text-primary me-2"></i>Overall Constructive Feedback</h6>
+          <p class="text-muted small mb-0" id="evalOverallFeedback"></p>
+        </div>
+
+        <!-- Missing Important Points -->
+        <div class="card card-custom p-3 mb-3">
+          <h6 class="fw-bold text-danger mb-2"><i class="bi bi-exclamation-triangle-fill me-2"></i>Missing Important Concepts</h6>
+          <ul class="list-unstyled small mb-0 ps-1" id="evalMissingPoints"></ul>
+        </div>
+
+        <!-- Improved Sample Answer -->
+        <div class="card card-custom p-3 mb-3">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <h6 class="fw-bold text-success mb-0"><i class="bi bi-stars me-2"></i>Improved Model Answer</h6>
+            <button class="btn btn-sm btn-outline-secondary py-0 px-2 small" onclick="copyImprovedAnswer()">
+              <i class="bi bi-clipboard me-1"></i>Copy
+            </button>
+          </div>
+          <div class="sample-answer-box text-dark small" id="evalImprovedAnswer"></div>
+        </div>
+
+        <!-- Improvement Suggestions -->
+        <div class="card card-custom p-3 mb-3">
+          <h6 class="fw-bold text-primary mb-2"><i class="bi bi-graph-up-arrow me-2"></i>Key Recommendations for Improvement</h6>
+          <ul class="list-unstyled small mb-0 ps-1" id="evalSuggestions"></ul>
+        </div>
+
+      </div>
+
+      <!-- Empty Placeholder when no answer evaluated yet -->
+      <div id="evalEmptyPlaceholder" class="card card-custom p-5 text-center bg-white">
+        <div class="my-4">
+          <i class="bi bi-clipboard-data text-primary display-4"></i>
+          <h4 class="fw-bold mt-3">Awaiting Your Answer</h4>
+          <p class="text-muted mx-auto" style="max-width: 420px;">
+            Enter an interview question and your complete response on the left, then click <strong>Evaluate with IBM Granite</strong> to view in-depth coaching feedback.
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+// Word count updater
+const answerArea = document.getElementById("evalAnswer");
+if (answerArea) {
+  answerArea.addEventListener("input", () => {
+    const words = answerArea.value.trim().split(/\s+/).filter(Boolean).length;
+    document.getElementById("charCount").textContent = `${words} words`;
+  });
+}
+
+function loadSampleQuestion() {
+  document.getElementById("evalJobRole").value = "Software Development Engineer";
+  document.getElementById("evalQuestion").value = "What is the difference between Method Overloading and Method Overriding in Java, and when would you use each?";
+  document.getElementById("evalAnswer").value = "Method overloading happens in the same class where multiple methods have the same name but different parameters. Overriding happens when a subclass provides its own implementation of a method defined in its parent class using @Override.";
+  const words = document.getElementById("evalAnswer").value.trim().split(/\s+/).filter(Boolean).length;
+  document.getElementById("charCount").textContent = `${words} words`;
+}
+
+function copyImprovedAnswer() {
+  const text = document.getElementById("evalImprovedAnswer").innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    alert("Model answer copied to clipboard!");
+  });
+}
+
+// Hide placeholder on result
+const observer = new MutationObserver(() => {
+  const res = document.getElementById("evaluationResultCard");
+  const plh = document.getElementById("evalEmptyPlaceholder");
+  if (res && plh && res.style.display !== "none") {
+    plh.style.display = "none";
+  }
+});
+const target = document.getElementById("evaluationResultCard");
+if (target) observer.observe(target, { attributes: true, attributeFilter: ['style'] });
+</script>
+{% endblock %}

@@ -1,0 +1,31 @@
+[Topic: HR - Introduction and Elevator Pitch]
+Question: Tell me about yourself.
+Key Concepts: Elevator pitch, Present-Past-Future framework, Professional relevance, Academic background, Key technical skills, Projects and career objective.
+Evaluation Criteria:
+- Structure: Start with current status/qualification -> highlight key skills & notable project -> explain why this company/role excites you.
+- Concise delivery (under 2 minutes). Avoid reciting personal life history; focus on professional value proposition.
+
+[Topic: HR - Behavioral and STAR Method]
+Question: Describe a challenging project you worked on and how you resolved unexpected hurdles.
+Key Concepts: STAR Framework (Situation, Task, Action, Result), Problem-solving mindset, Technical perseverance, Team collaboration, Quantifiable outcome.
+Evaluation Criteria:
+- Situation: Context and problem background.
+- Task: Specific responsibility assigned to the candidate.
+- Action: Concrete steps taken, technologies applied, debugging strategies.
+- Result: Tangible outcome, lessons learned, metric/performance improvement.
+
+[Topic: HR - Conflict Resolution & Teamwork]
+Question: How do you handle disagreements with teammates or team leads during project execution?
+Key Concepts: Active listening, Objective data-driven decision making, Empathy, Consensus building, Commitment to project goals.
+Evaluation Criteria:
+- Focuses on resolving issues professionally without personal hostility.
+- Emphasizes understanding the other perspective and validating against requirements or performance benchmarks.
+- Demonstrates ability to disagree and commit once a decision is finalized.
+
+[Topic: HR - Career Goals & Adaptability]
+Question: Where do you see yourself in 3 to 5 years?
+Key Concepts: Growth mindset, Continuous learning, Technical mastery, Mentorship/leadership aspirations, Alignment with organizational vision.
+Evaluation Criteria:
+- Demonstrates realistic ambition: evolving from a proficient contributor to a domain expert or mentor.
+- Reflects commitment to learning emerging technologies (Cloud, AI, Microservices).
+- Shows mutual benefit for both the candidate's development and company impact.

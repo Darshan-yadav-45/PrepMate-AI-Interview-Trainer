@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+
+{% block title %}AI Interview Question Generator - PrepMate{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row g-4">
+    
+    <!-- Left Column: Generator Form -->
+    <div class="col-lg-5">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="fw-bold mb-0"><i class="bi bi-patch-question text-primary me-2"></i>Question Generator</h3>
+        <span class="badge bg-primary-subtle text-primary border border-primary-subtle p-2">Module 3</span>
+      </div>
+      <p class="text-muted small">
+        IBM Granite synthesizes interview questions customized to your specific background, skills, and target job role using RAG ground truth.
+      </p>
+
+      <div id="genAlertContainer"></div>
+
+      <!-- Active Profile Banner -->
+      <div class="card card-custom mb-3 bg-light border">
+        <div class="card-body p-3">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <span class="small text-muted text-uppercase fw-bold">Active Candidate</span>
+              <h6 class="fw-bold mb-0 text-dark">{{ profile.full_name if profile else "Guest Candidate" }}</h6>
+            </div>
+            <a href="{{ url_for('profile') }}" class="btn btn-sm btn-link text-decoration-none">Edit</a>
+          </div>
+          <div class="small text-muted mt-2">
+            <div><strong>Skills:</strong> {{ (profile.technical_skills if profile else "Python, Java, SQL, OOP")[:60] }}...</div>
+            <div><strong>Level:</strong> {{ profile.experience_level if profile else "Fresher" }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-custom p-4">
+        <form id="questionGenForm">
+          <div class="mb-3">
+            <label for="genJobRole" class="form-label fw-semibold">Target Job Role <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="genJobRole" 
+                   value="{{ profile.target_role if profile else 'Software Development Engineer' }}" 
+                   placeholder="e.g. Backend Developer, Data Analyst, Cloud Engineer" required>
+          </div>
+
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label for="genInterviewType" class="form-label fw-semibold">Interview Type</label>
+              <select class="form-select" id="genInterviewType">
+                <option value="Technical" selected>Technical (Code & Architecture)</option>
+                <option value="HR">HR & Behavioral (STAR)</option>
+              </select>
+            </div>
+
+            <div class="col-md-6">
+              <label for="genDifficulty" class="form-label fw-semibold">Difficulty Level</label>
+              <select class="form-select" id="genDifficulty">
+                <option value="Beginner" selected>Beginner (Campus / Fresher)</option>
+                <option value="Intermediate">Intermediate (1-2 Years)</option>
+                <option value="Advanced">Advanced (Challenging / Edge cases)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <label for="genNumQuestions" class="form-label fw-semibold">Number of Questions</label>
+            <select class="form-select" id="genNumQuestions">
+              <option value="3">3 Questions (Quick Practice)</option>
+              <option value="5" selected>5 Questions (Standard Session)</option>
+              <option value="7">7 Questions (In-Depth Round)</option>
+            </select>
+          </div>
+
+          <button type="submit" class="btn btn-primary-custom w-100 py-2">
+            <i class="bi bi-cpu-fill me-2"></i>Generate with IBM Granite
+          </button>
+        </form>
+      </div>
+
+      <!-- Tips Box -->
+      <div class="responsible-ai-banner mt-3">
+        <h6 class="fw-bold mb-1"><i class="bi bi-lightbulb-fill text-warning me-1"></i> RAG Grounding</h6>
+        <p class="small text-muted mb-0">
+          PrepMate automatically fetches relevant computer science topics (OOP, SQL, Python, DBMS, STAR) from our local knowledge base to inject verified context into Granite's prompt.
+        </p>
+      </div>
+    </div>
+
+    <!-- Right Column: Generated Questions Output -->
+    <div class="col-lg-7">
+      <div id="questionsResultContainer" style="display: none;">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h4 class="fw-bold mb-0">Generated Interview Questions</h4>
+          <div class="d-flex gap-2">
+            <span id="modelUsedBadge" class="badge badge-granite">IBM Granite</span>
+            <span id="ragSourcesBadge" class="badge badge-rag">RAG Reference Attached</span>
+          </div>
+        </div>
+
+        <div id="questionsList"></div>
+      </div>
+
+      <!-- Empty Placeholder when no questions generated yet -->
+      <div id="questionsEmptyPlaceholder" class="card card-custom p-5 text-center bg-white">
+        <div class="my-4">
+          <i class="bi bi-chat-square-dots text-primary display-4"></i>
+          <h4 class="fw-bold mt-3">Ready to Generate Questions</h4>
+          <p class="text-muted mx-auto" style="max-width: 420px;">
+            Configure your target job role and interview preferences on the left and click <strong>Generate with IBM Granite</strong> to receive personalized questions.
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+// Toggle placeholder visibility when results appear
+const observer = new MutationObserver(() => {
+  const container = document.getElementById("questionsResultContainer");
+  const placeholder = document.getElementById("questionsEmptyPlaceholder");
+  if (container && placeholder) {
+    if (container.style.display !== "none") {
+      placeholder.style.display = "none";
+    }
+  }
+});
+const target = document.getElementById("questionsResultContainer");
+if (target) {
+  observer.observe(target, { attributes: true, attributeFilter: ['style'] });
+}
+</script>
+{% endblock %}

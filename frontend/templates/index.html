@@ -1,0 +1,294 @@
+{% extends "base.html" %}
+
+{% block title %}PrepMate - Your Personal AI Interview Coach{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+  <div class="container">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-7">
+        <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-2 rounded-pill fw-semibold mb-3">
+          <i class="bi bi-stars me-1"></i> AICTE–IBM SkillsBuild Engagements 2026 &bull; Problem #22
+        </span>
+        <h1 class="hero-title mb-3">
+          Your Personal <span class="hero-highlight">AI Interview Coach</span> Powered by IBM Granite
+        </h1>
+        <p class="hero-subtitle mb-4">
+          Prepare for technical and HR campus interviews with precision. PrepMate understands your background, projects, and target role to generate tailored questions, evaluate your answers, and provide actionable engineering feedback.
+        </p>
+
+        <div class="d-flex flex-wrap gap-3 mb-4">
+          {% if profile %}
+            <a href="{{ url_for('mock_interview') }}" class="btn btn-primary-custom btn-lg shadow-sm">
+              <i class="bi bi-play-circle-fill me-2"></i>Start Mock Interview
+            </a>
+            <a href="{{ url_for('generator') }}" class="btn btn-outline-custom btn-lg">
+              <i class="bi bi-patch-question me-2"></i>Generate Questions
+            </a>
+          {% else %}
+            <a href="{{ url_for('profile') }}" class="btn btn-primary-custom btn-lg shadow-sm">
+              <i class="bi bi-rocket-takeoff-fill me-2"></i>Start Preparing (Create Profile)
+            </a>
+            <a href="{{ url_for('generator') }}" class="btn btn-outline-custom btn-lg">
+              <i class="bi bi-patch-question me-2"></i>Explore Questions
+            </a>
+          {% endif %}
+        </div>
+
+        <!-- Trust Badges -->
+        <div class="d-flex align-items-center gap-3 pt-2">
+          <div class="d-flex align-items-center small text-muted">
+            <i class="bi bi-check-circle-fill text-success me-2 fs-5"></i>
+            <span>IBM Granite 3-8B</span>
+          </div>
+          <div class="d-flex align-items-center small text-muted">
+            <i class="bi bi-check-circle-fill text-success me-2 fs-5"></i>
+            <span>watsonx.ai REST</span>
+          </div>
+          <div class="d-flex align-items-center small text-muted">
+            <i class="bi bi-check-circle-fill text-success me-2 fs-5"></i>
+            <span>Domain-Specific RAG</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-5">
+        <!-- Candidate Preview Card / Active Status -->
+        <div class="card card-custom p-4 border-0 shadow-lg position-relative">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <div>
+              <span class="text-uppercase text-muted fw-bold small">Current Candidate</span>
+              <h4 class="fw-bold mb-0 text-dark">
+                {{ profile.full_name if profile else "Prospective Candidate" }}
+              </h4>
+            </div>
+            <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2 py-1">
+              {{ profile.target_role if profile else "Software Engineer" }}
+            </span>
+          </div>
+
+          <hr class="text-muted my-2">
+
+          <div class="row g-2 my-2 small">
+            <div class="col-6">
+              <span class="text-muted">Education:</span>
+              <div class="fw-semibold text-dark text-truncate">{{ profile.education if profile else "B.Tech / MCA / BCA" }}</div>
+            </div>
+            <div class="col-6">
+              <span class="text-muted">Experience Level:</span>
+              <div class="fw-semibold text-dark">{{ profile.experience_level if profile else "Fresher (2026)" }}</div>
+            </div>
+            <div class="col-12 mt-2">
+              <span class="text-muted">Key Skills:</span>
+              <div class="fw-semibold text-dark text-truncate">{{ profile.technical_skills if profile else "Python, SQL, Java, OOP, Data Structures" }}</div>
+            </div>
+          </div>
+
+          <div class="bg-light p-3 rounded-3 mt-3 border">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <span class="small fw-bold text-dark"><i class="bi bi-database me-1 text-primary"></i> RAG Knowledge Base</span>
+              <span class="badge bg-secondary-subtle text-secondary small">{{ kb_chunks_count }} Index Chunks</span>
+            </div>
+            <p class="small text-muted mb-0">
+              Covers Java Core, Python, SQL Joins, DBMS ACID, OOP SOLID, HR Behavioral (STAR), and Fresher Project Defense.
+            </p>
+          </div>
+
+          <div class="mt-3 text-end">
+            <a href="{{ url_for('profile') }}" class="btn btn-sm btn-link text-decoration-none">
+              <i class="bi bi-pencil-square me-1"></i>Edit Candidate Profile &rarr;
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5">
+  <div class="container py-3">
+    <div class="text-center mb-5">
+      <span class="badge bg-primary-subtle text-primary px-3 py-2 rounded-pill fw-semibold">Features</span>
+      <h2 class="fw-bold mt-2">Tailored Interview Training for Tech Aspirants</h2>
+      <p class="text-muted mx-auto" style="max-width: 650px;">
+        PrepMate bridges the gap between college curricula and real software industry recruitment standards using IBM Granite.
+      </p>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="feature-box">
+          <div class="feature-icon-wrapper">
+            <i class="bi bi-cpu"></i>
+          </div>
+          <h5 class="fw-bold">IBM Granite Integration</h5>
+          <p class="text-muted small mb-0">
+            Harnesses IBM's state-of-the-art Granite foundation models through IBM watsonx.ai for intelligent question formulation and nuanced evaluation.
+          </p>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="feature-box">
+          <div class="feature-icon-wrapper">
+            <i class="bi bi-journal-bookmark"></i>
+          </div>
+          <h5 class="fw-bold">RAG Knowledge Retrieval</h5>
+          <p class="text-muted small mb-0">
+            Augments AI prompts with local curated domain knowledge in Java, Python, SQL, DBMS, OOP, and HR criteria to prevent hallucinations.
+          </p>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="feature-box">
+          <div class="feature-icon-wrapper">
+            <i class="bi bi-person-lines-fill"></i>
+          </div>
+          <h5 class="fw-bold">Profile-Aware Personalization</h5>
+          <p class="text-muted small mb-0">
+            Questions adjust dynamically to candidate credentials—incorporating their college projects, internships, and specific programming languages.
+          </p>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="feature-box">
+          <div class="feature-icon-wrapper">
+            <i class="bi bi-ui-checks"></i>
+          </div>
+          <h5 class="fw-bold">4-Dimension Evaluation</h5>
+          <p class="text-muted small mb-0">
+            Evaluates candidate answers across Relevance, Technical Correctness, Clarity, and Completeness—highlighting exact missing points.
+          </p>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="feature-box">
+          <div class="feature-icon-wrapper">
+            <i class="bi bi-mic"></i>
+          </div>
+          <h5 class="fw-bold">Interactive Mock Interview</h5>
+          <p class="text-muted small mb-0">
+            Step-by-step simulated 5-question interview with progress tracking, read-aloud question audio, and a closing comprehensive report.
+          </p>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="feature-box">
+          <div class="feature-icon-wrapper">
+            <i class="bi bi-shield-lock"></i>
+          </div>
+          <h5 class="fw-bold">Responsible & Safe AI</h5>
+          <p class="text-muted small mb-0">
+            Educational transparency first: avoids arbitrary score bias, provides clear feedback framing, and safeguards API credentials on the server.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="py-5 bg-white border-top border-bottom">
+  <div class="container py-3">
+    <div class="text-center mb-5">
+      <span class="badge bg-primary-subtle text-primary px-3 py-2 rounded-pill fw-semibold">Workflow</span>
+      <h2 class="fw-bold mt-2">How PrepMate Works</h2>
+      <p class="text-muted">A clear, disciplined 4-step preparation cycle</p>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-lg-3 col-md-6">
+        <div class="text-center p-3">
+          <div class="step-circle mb-3 fs-5">1</div>
+          <h5 class="fw-bold">Profile Setup</h5>
+          <p class="text-muted small">
+            Enter your college, academic degree, programming languages, and capstone projects.
+          </p>
+        </div>
+      </div>
+
+      <div class="col-lg-3 col-md-6">
+        <div class="text-center p-3">
+          <div class="step-circle mb-3 fs-5">2</div>
+          <h5 class="fw-bold">Knowledge Retrieval</h5>
+          <p class="text-muted small">
+            PrepMate's RAG engine extracts relevant interview criteria and standard interview questions.
+          </p>
+        </div>
+      </div>
+
+      <div class="col-lg-3 col-md-6">
+        <div class="text-center p-3">
+          <div class="step-circle mb-3 fs-5">3</div>
+          <h5 class="fw-bold">Granite Generation</h5>
+          <p class="text-muted small">
+            IBM Granite creates targeted technical and HR questions calibrated to your skill level.
+          </p>
+        </div>
+      </div>
+
+      <div class="col-lg-3 col-md-6">
+        <div class="text-center p-3">
+          <div class="step-circle mb-3 fs-5">4</div>
+          <h5 class="fw-bold">Evaluative Feedback</h5>
+          <p class="text-muted small">
+            Submit your answer to receive detailed feedback, missing concepts, and an improved model answer.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center mt-4">
+      <a href="{{ url_for('mock_interview') }}" class="btn btn-primary-custom btn-lg">
+        <i class="bi bi-play-circle-fill me-2"></i>Launch Mock Interview Now
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Recent Sessions Preview if available -->
+{% if recent_sessions %}
+<section class="py-5">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h4 class="fw-bold mb-1">Recent Interview Sessions</h4>
+        <p class="text-muted small mb-0">Review past practice sessions and feedback stored in SQLite</p>
+      </div>
+      <a href="{{ url_for('history') }}" class="btn btn-outline-custom btn-sm">View All History &rarr;</a>
+    </div>
+
+    <div class="row g-3">
+      {% for s in recent_sessions %}
+        <div class="col-md-4">
+          <div class="card card-custom h-100">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <span class="badge bg-primary text-white">{{ s.interview_type }}</span>
+                <small class="text-muted">{{ s.created_at[:10] }}</small>
+              </div>
+              <h5 class="card-title fw-bold text-dark">{{ s.job_role }}</h5>
+              <p class="card-text text-muted small">
+                {{ (s.feedback_summary or "Session completed successfully.")[:110] }}...
+              </p>
+              <div class="d-flex justify-content-between align-items-center pt-2 border-top">
+                <span class="small text-muted">{{ s.completed_count }} of {{ s.questions_count }} Qs</span>
+                <a href="{{ url_for('history_detail', session_id=s.id) }}" class="btn btn-sm btn-outline-primary">
+                  Review &rarr;
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,24 @@
+[Topic: DBMS - ACID Properties]
+Question: What are ACID properties in database management systems and why are they crucial?
+Key Concepts: Atomicity, Consistency, Isolation, Durability, Transaction management, Commit, Rollback, WAL (Write-Ahead Logging).
+Evaluation Criteria:
+- Atomicity: "All or nothing" principle. Either all transaction operations succeed, or all are rolled back.
+- Consistency: The database must transition from one valid state to another, preserving constraints and integrity rules.
+- Isolation: Concurrent transactions execute without interfering with one another (Isolation levels: Read Uncommitted, Read Committed, Repeatable Read, Serializable).
+- Durability: Once a transaction commits, its effects persist permanently even in case of power failure or crash.
+
+[Topic: DBMS - Normalization]
+Question: What is Database Normalization? Explain 1NF, 2NF, 3NF, and BCNF.
+Key Concepts: Data redundancy, Insertion anomaly, Deletion anomaly, Update anomaly, Functional Dependency, Candidate Keys.
+Evaluation Criteria:
+- 1NF: Atomic attribute values (no repeating groups/multivalued columns), unique row identifier.
+- 2NF: Must be in 1NF + No partial dependency (non-prime attributes must depend on the whole candidate key).
+- 3NF: Must be in 2NF + No transitive dependency (non-prime attributes must depend only on candidate keys).
+- BCNF (Boyce-Codd): Stricter 3NF where for every functional dependency X -> Y, X must be a super key.
+
+[Topic: DBMS - Relational vs NoSQL]
+Question: Compare Relational DBMS (RDBMS) with NoSQL databases. When would you choose one over the other?
+Key Concepts: Structured schema, ACID vs BASE, Vertical scaling vs Horizontal scaling, Document (MongoDB), Key-Value (Redis), Column-family (Cassandra), Graph (Neo4j).
+Evaluation Criteria:
+- RDBMS: Strict schema, ACID compliance, complex relational joins, ideal for financial/e-commerce core transactions.
+- NoSQL: Flexible dynamic schema, high write throughput, horizontal partition scaling, ideal for big data, real-time analytics, session stores.

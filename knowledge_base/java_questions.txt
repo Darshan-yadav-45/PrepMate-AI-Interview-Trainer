@@ -1,0 +1,41 @@
+[Topic: Java Core - OOP and Principles]
+Question: What are the main principles of Object-Oriented Programming (OOP) in Java?
+Key Concepts: Encapsulation, Inheritance, Polymorphism, Abstraction.
+Evaluation Criteria:
+- Encapsulation: Binding data with methods; using private variables and public getters/setters.
+- Inheritance: Code reusability using 'extends'; superclass and subclass relationship.
+- Polymorphism: Compile-time (Method Overloading) and Runtime (Method Overriding with @Override).
+- Abstraction: Hiding implementation details using abstract classes and interfaces.
+Sample Good Answer: Java OOP relies on four core pillars: Encapsulation wraps data and code into a single unit protecting state via access modifiers. Inheritance allows a child class to inherit fields and methods from a parent class using 'extends', promoting reusability. Polymorphism allows an entity to take multiple forms—either compile-time overloading or runtime overriding through dynamic method dispatch. Abstraction focuses on what an object does rather than how it does it, implemented using abstract classes and interfaces.
+
+[Topic: Java Memory Management]
+Question: Explain the difference between JVM, JRE, and JDK, and how Java Garbage Collection works.
+Key Concepts: JDK (compiler + tools + JRE), JRE (JVM + core libraries), JVM (bytecode execution engine), Heap, Stack, Garbage Collector (Mark and Sweep, Generational GC: Eden, Survivor, Tenured).
+Evaluation Criteria:
+- Clear distinction between development tools (JDK) and runtime environment (JRE/JVM).
+- Explanation of Heap (objects) vs Stack (primitive types, method frames, references).
+- Basic GC mechanism: identifying unreachable objects using GC roots.
+
+[Topic: Java Collections Framework]
+Question: What is the difference between HashMap, HashSet, and ConcurrentHashMap?
+Key Concepts: Key-value pairs vs unique element sets, hashing mechanism, equals() and hashCode() contract, thread-safety, Segment locking vs synchronized collections.
+Evaluation Criteria:
+- HashMap stores key-value pairs, allows one null key, is not synchronized.
+- HashSet internally uses HashMap to store unique elements.
+- ConcurrentHashMap provides concurrent access with segment/bucket level locking without locking the entire table.
+
+[Topic: Java Multi-threading and Concurrency]
+Question: How does multi-threading work in Java, and what is the difference between Runnable and Callable?
+Key Concepts: Thread lifecycle, Runnable (run method, no return, cannot throw checked exception), Callable (call method, returns Future<T>, throws checked exceptions), ExecutorService.
+Evaluation Criteria:
+- Mentions thread creation methods: extending Thread or implementing Runnable/Callable.
+- Compares return values and exception handling of Runnable vs Callable.
+- Mentions thread pools and race conditions / synchronization.
+
+[Topic: Java 8 Features]
+Question: What are the key features introduced in Java 8, and how do Lambda Expressions and Streams differ?
+Key Concepts: Lambda Expressions, Streams API, Functional Interfaces, Default methods, Optional class.
+Evaluation Criteria:
+- Mentions functional programming support with lambdas.
+- Distinguishes Streams (pipeline for data processing, lazy evaluation) from Collections (data structure).
+- Explains Optional to avoid NullPointerExceptions.

@@ -1,0 +1,24 @@
+[Topic: OOP Concepts - SOLID Principles]
+Question: What are the SOLID design principles in software engineering?
+Key Concepts: Single Responsibility, Open/Closed, Liskov Substitution, Interface Segregation, Dependency Inversion.
+Evaluation Criteria:
+- S: Single Responsibility Principle (A class should have one, and only one, reason to change).
+- O: Open/Closed Principle (Software entities should be open for extension, but closed for modification).
+- L: Liskov Substitution Principle (Subtypes must be substitutable for their base types without altering correctness).
+- I: Interface Segregation Principle (Clients should not be forced to depend on interfaces they do not use; fine-grained interfaces).
+- D: Dependency Inversion Principle (High-level modules should not depend on low-level modules; both should depend on abstractions).
+
+[Topic: OOP - Composition vs Inheritance]
+Question: What does "Favor composition over inheritance" mean, and why is it recommended?
+Key Concepts: "Has-a" vs "Is-a" relationship, tight coupling, fragile base class problem, runtime flexibility.
+Evaluation Criteria:
+- Inheritance creates tight coupling between subclass and superclass; changes to superclass can inadvertently break subclass logic.
+- Composition allows dynamic behavior change at runtime through dependency injection or strategy pattern.
+- Demonstrates when inheritance is appropriate (true subtype hierarchy) vs composition (reusing behavior/capabilities).
+
+[Topic: OOP - Design Patterns]
+Question: Explain the Singleton and Factory design patterns with their use cases and potential pitfalls.
+Key Concepts: Creational patterns, Singleton (single instance, global point of access, thread-safety, double-checked locking), Factory (delegating object instantiation to subclasses or factory method).
+Evaluation Criteria:
+- Singleton: Ensures only one instance exists. Pitfall: Acts like global mutable state, complicates unit testing/mocking.
+- Factory: Decouples object creation from client code, adhering to Open/Closed principle.

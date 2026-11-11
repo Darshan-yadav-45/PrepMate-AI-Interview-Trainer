@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block title %}Interview History - PrepMate{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="fw-bold mb-1"><i class="bi bi-clock-history text-primary me-2"></i>Interview History & Records</h2>
+      <p class="text-muted mb-0">
+        All past mock interviews and evaluation sessions persisted in the local SQLite database.
+      </p>
+    </div>
+    <div class="d-flex gap-2">
+      <span class="badge bg-primary-subtle text-primary border border-primary-subtle p-2">Module 6</span>
+      <a href="{{ url_for('mock_interview') }}" class="btn btn-primary-custom btn-sm">
+        <i class="bi bi-plus-circle me-1"></i> New Mock Session
+      </a>
+    </div>
+  </div>
+
+  {% if sessions and sessions|length > 0 %}
+    <div class="card card-custom">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light">
+            <tr>
+              <th scope="col" class="ps-4">Date & Time</th>
+              <th scope="col">Candidate</th>
+              <th scope="col">Job Role</th>
+              <th scope="col">Type</th>
+              <th scope="col">Questions</th>
+              <th scope="col">Feedback Summary</th>
+              <th scope="col" class="text-end pe-4">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for s in sessions %}
+              <tr id="session-row-{{ s.id }}">
+                <td class="ps-4">
+                  <div class="fw-semibold text-dark">{{ s.created_at[:10] }}</div>
+                  <small class="text-muted">{{ s.created_at[11:16] }} UTC</small>
+                </td>
+                <td>
+                  <span class="fw-medium text-dark">{{ s.candidate_name or "Student" }}</span>
+                </td>
+                <td>
+                  <span class="fw-bold text-primary">{{ s.job_role }}</span>
+                  <div><span class="badge bg-light text-secondary border small">{{ s.difficulty }}</span></div>
+                </td>
+                <td>
+                  <span class="badge {% if s.interview_type == 'Technical' %}bg-primary{% else %}bg-info text-dark{% endif %}">
+                    {{ s.interview_type }}
+                  </span>
+                </td>
+                <td>
+                  <span class="badge bg-secondary-subtle text-dark">
+                    {{ s.completed_count }} / {{ s.questions_count }}
+                  </span>
+                </td>
+                <td style="max-width: 320px;">
+                  <div class="small text-muted text-truncate" title="{{ s.feedback_summary }}">
+                    {{ s.feedback_summary or "Session in progress or completed." }}
+                  </div>
+                </td>
+                <td class="text-end pe-4">
+                  <a href="{{ url_for('history_detail', session_id=s.id) }}" class="btn btn-sm btn-outline-primary me-1" title="View Full Transcript">
+                    <i class="bi bi-eye"></i> Details
+                  </a>
+                  <button class="btn btn-sm btn-outline-danger" onclick="deleteSession({{ s.id }})" title="Delete Record">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  {% else %}
+    <div class="card card-custom p-5 text-center bg-white">
+      <div class="my-4">
+        <i class="bi bi-inbox text-muted display-4"></i>
+        <h4 class="fw-bold mt-3">No Interview Sessions Yet</h4>
+        <p class="text-muted mx-auto" style="max-width: 420px;">
+          Complete your first mock interview to view session transcripts, feedback summaries, and growth metrics here.
+        </p>
+        <a href="{{ url_for('mock_interview') }}" class="btn btn-primary-custom mt-2">
+          <i class="bi bi-play-circle-fill me-1"></i> Start First Mock Interview
+        </a>
+      </div>
+    </div>
+  {% endif %}
+
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+async function deleteSession(sessionId) {
+  if (!confirm("Are you sure you want to delete this interview record? This action cannot be undone.")) {
+    return;
+  }
+
+  try {
+    const resp = await fetch(`/api/history/${sessionId}`, {
+      method: "DELETE"
+    });
+    const data = await resp.json();
+    if (data.success) {
+      const row = document.getElementById(`session-row-${sessionId}`);
+      if (row) row.remove();
+    } else {
+      alert("Failed to delete interview record.");
+    }
+  } catch (err) {
+    alert("Error communicating with database.");
+    console.error(err);
+  }
+}
+</script>
+{% endblock %}

@@ -1,0 +1,180 @@
+{% extends "base.html" %}
+
+{% block title %}Session Transcript #{{ session.id }} - PrepMate{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  
+  <!-- Back button and title -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <a href="{{ url_for('history') }}" class="btn btn-outline-secondary btn-sm mb-2">
+        <i class="bi bi-arrow-left me-1"></i> Back to History
+      </a>
+      <h2 class="fw-bold mb-1">
+        <i class="bi bi-file-earmark-medical text-primary me-2"></i>Interview Session Transcript #{{ session.id }}
+      </h2>
+      <p class="text-muted small mb-0">Recorded on {{ session.created_at }}</p>
+    </div>
+    <div>
+      <button class="btn btn-outline-primary btn-sm" onclick="window.print()">
+        <i class="bi bi-printer me-1"></i> Print / Save PDF
+      </button>
+    </div>
+  </div>
+
+  <!-- Session Metadata Card -->
+  <div class="card card-custom p-4 mb-4">
+    <div class="row g-3">
+      <div class="col-md-3">
+        <span class="text-muted small">Candidate Name:</span>
+        <h6 class="fw-bold mb-0 text-dark">{{ session.candidate_name or "Student Candidate" }}</h6>
+        <small class="text-muted">{{ session.education }} ({{ session.college }})</small>
+      </div>
+
+      <div class="col-md-3">
+        <span class="text-muted small">Target Role:</span>
+        <h6 class="fw-bold mb-0 text-primary">{{ session.job_role }}</h6>
+        <small class="text-muted">Difficulty: {{ session.difficulty }}</small>
+      </div>
+
+      <div class="col-md-3">
+        <span class="text-muted small">Interview Type:</span>
+        <div>
+          <span class="badge {% if session.interview_type == 'Technical' %}bg-primary{% else %}bg-info text-dark{% endif %}">
+            {{ session.interview_type }} Round
+          </span>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <span class="text-muted small">Progress:</span>
+        <h6 class="fw-bold mb-0 text-dark">{{ session.completed_count }} of {{ session.questions_count }} Questions Completed</h6>
+      </div>
+    </div>
+
+    <!-- Holistic Summary -->
+    {% if session.feedback_summary %}
+      <hr class="my-3">
+      <h6 class="fw-bold text-dark mb-2"><i class="bi bi-file-text-fill text-primary me-2"></i>IBM Granite Executive Summary</h6>
+      <p class="text-muted small mb-3">{{ session.feedback_summary }}</p>
+
+      <div class="row g-3">
+        {% if session.strengths %}
+          <div class="col-md-6">
+            <div class="p-3 bg-light rounded border border-success-subtle">
+              <span class="small fw-bold text-success"><i class="bi bi-check-circle-fill me-1"></i> Key Strengths Observed:</span>
+              <div class="small text-muted mt-1" style="white-space: pre-line;">{{ session.strengths }}</div>
+            </div>
+          </div>
+        {% endif %}
+
+        {% if session.improvements %}
+          <div class="col-md-6">
+            <div class="p-3 bg-light rounded border border-primary-subtle">
+              <span class="small fw-bold text-primary"><i class="bi bi-arrow-up-circle-fill me-1"></i> Priority Recommendations:</span>
+              <div class="small text-muted mt-1" style="white-space: pre-line;">{{ session.improvements }}</div>
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+
+  <!-- Detailed Q&A Transcript -->
+  <h4 class="fw-bold text-dark mb-3"><i class="bi bi-list-check text-primary me-2"></i>Detailed Question & Answer Evaluations</h4>
+
+  {% if session.qa_records and session.qa_records|length > 0 %}
+    {% for qa in session.qa_records %}
+      <div class="card card-custom mb-4">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+          <div>
+            <span class="question-badge me-2">Question {{ qa.question_number }}</span>
+            <span class="badge bg-light text-dark border">{{ qa.category or "General" }}</span>
+          </div>
+          <span class="badge bg-secondary-subtle text-dark small">Evaluated by: {{ qa.model_used }}</span>
+        </div>
+        
+        <div class="card-body p-4">
+          <!-- Question -->
+          <h5 class="fw-bold text-dark mb-3">{{ qa.question_text }}</h5>
+
+          <!-- Student Answer -->
+          <div class="mb-3">
+            <span class="text-muted small fw-semibold">Candidate's Submitted Answer:</span>
+            <div class="p-3 bg-light rounded border text-dark small mt-1">
+              {{ qa.student_answer if qa.student_answer else "(No answer provided)" }}
+            </div>
+          </div>
+
+          <!-- Evaluation Feedback Dimensions -->
+          <div class="row g-2 mb-3">
+            <div class="col-md-6">
+              <div class="eval-metric-card relevance py-2">
+                <span class="small fw-bold text-secondary">Relevance:</span>
+                <p class="small mb-0">{{ qa.relevance_feedback }}</p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="eval-metric-card correctness py-2">
+                <span class="small fw-bold text-success">Correctness:</span>
+                <p class="small mb-0">{{ qa.correctness_feedback }}</p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="eval-metric-card clarity py-2">
+                <span class="small fw-bold text-primary">Clarity:</span>
+                <p class="small mb-0">{{ qa.clarity_feedback }}</p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="eval-metric-card completeness py-2">
+                <span class="small fw-bold" style="color: #8a3ffc;">Completeness:</span>
+                <p class="small mb-0">{{ qa.completeness_feedback }}</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Missing Points -->
+          {% if qa.missing_points %}
+            <div class="mb-3">
+              <span class="text-danger small fw-semibold"><i class="bi bi-exclamation-circle-fill me-1"></i>Key Concepts Omitted:</span>
+              <div class="small text-muted mt-1" style="white-space: pre-line;">{{ qa.missing_points }}</div>
+            </div>
+          {% endif %}
+
+          <!-- Improved Model Answer -->
+          {% if qa.improved_answer %}
+            <div class="mb-3">
+              <span class="text-success small fw-semibold"><i class="bi bi-stars me-1"></i>Model Benchmark Answer:</span>
+              <div class="sample-answer-box small text-dark mt-1">
+                {{ qa.improved_answer }}
+              </div>
+            </div>
+          {% endif %}
+
+          <!-- RAG Sources -->
+          {% if qa.rag_sources %}
+            <div class="pt-2 border-top">
+              <span class="badge badge-rag small">RAG Knowledge Retrieved: {{ qa.rag_sources }}</span>
+            </div>
+          {% endif %}
+
+        </div>
+      </div>
+    {% endfor %}
+  {% else %}
+    <div class="card card-custom p-4 text-center text-muted">
+      No individual question answers recorded for this session.
+    </div>
+  {% endif %}
+
+  <!-- Back button -->
+  <div class="text-center mt-4">
+    <a href="{{ url_for('history') }}" class="btn btn-outline-secondary">
+      <i class="bi bi-arrow-left me-1"></i> Return to History
+    </a>
+  </div>
+
+</div>
+{% endblock %}

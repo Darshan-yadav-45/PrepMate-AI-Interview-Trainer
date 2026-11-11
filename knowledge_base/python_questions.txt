@@ -1,0 +1,37 @@
+[Topic: Python Fundamentals - Data Types and Memory]
+Question: How does Python manage memory, and what is the difference between mutable and immutable types?
+Key Concepts: Dynamic typing, Reference counting, Cyclic Garbage Collector, Private Heap, Mutable (list, dict, set), Immutable (int, float, str, tuple, frozenset).
+Evaluation Criteria:
+- Distinction between mutable (in-place modification) and immutable (creates new object upon modification).
+- Explanation of Python memory manager: memory allocation on private heap.
+- Garbage collection mechanism: reference counting as primary mechanism, cyclic garbage collector for circular references.
+
+[Topic: Python Functions and Closures]
+Question: What are Python decorators and *args, **kwargs?
+Key Concepts: Higher-order functions, First-class functions, Decorator syntax (@wrapper), Variable positional arguments (*args), Variable keyword arguments (**kwargs).
+Evaluation Criteria:
+- Explains that decorators wrap a function to extend its behavior without modifying its source code.
+- Explains *args gathers extra positional arguments into a tuple.
+- Explains **kwargs gathers extra keyword arguments into a dictionary.
+
+[Topic: Python Generators and Iterators]
+Question: What is the difference between an Iterator, an Iterable, and a Generator in Python?
+Key Concepts: Iterable (__iter__), Iterator (__next__, StopIteration), Generator (yield keyword, state preservation, lazy evaluation).
+Evaluation Criteria:
+- Mentions lazy evaluation: generators produce items one-by-one on demand instead of loading everything into RAM.
+- Explains yield pauses function execution and remembers local state.
+- Highlights memory efficiency when handling large datasets.
+
+[Topic: Python GIL (Global Interpreter Lock)]
+Question: What is the GIL in CPython, and how does it affect multi-threading and multi-processing?
+Key Concepts: Global Interpreter Lock, Thread safety in CPython, CPU-bound vs I/O-bound tasks, multiprocessing module.
+Evaluation Criteria:
+- Explains that GIL allows only one native thread to execute Python bytecode at a time in CPython.
+- Notes that multi-threading benefits I/O-bound tasks (file reading, network calls), while multiprocessing or C-extensions are needed for parallel CPU-bound tasks.
+
+[Topic: Python OOP and Dunder Methods]
+Question: What are magic methods (dunder methods) in Python, and how is inheritance implemented?
+Key Concepts: __init__, __str__, __repr__, __eq__, super(), method resolution order (MRO, C3 linearization).
+Evaluation Criteria:
+- Clarifies difference between __str__ (human-readable) and __repr__ (unambiguous representation for debugging).
+- Demonstrates super() for calling base class constructor and handling multiple inheritance.

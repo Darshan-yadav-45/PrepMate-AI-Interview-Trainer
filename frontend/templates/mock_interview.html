@@ -1,0 +1,219 @@
+{% extends "base.html" %}
+
+{% block title %}Interactive Mock Interview - PrepMate{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-9">
+      
+      <!-- Top Title and Module Tag -->
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <h2 class="fw-bold mb-1"><i class="bi bi-play-circle text-primary me-2"></i>Interactive Mock Interview</h2>
+          <p class="text-muted mb-0">
+            A structured, 5-question mock interview session. Answer one question at a time to build confidence and receive a comprehensive final appraisal.
+          </p>
+        </div>
+        <span class="badge bg-primary-subtle text-primary border border-primary-subtle p-2">Module 5</span>
+      </div>
+
+      <div id="mockAlertContainer"></div>
+
+      <!-- STEP 1: Setup Card (Select Role & Launch) -->
+      <div id="mockSetupCard" class="card card-custom p-4 mb-4">
+        <h5 class="fw-bold text-dark mb-3"><i class="bi bi-gear-wide-connected text-primary me-2"></i>Configure Your Interview Session</h5>
+        
+        <div class="row g-3 mb-4">
+          <div class="col-md-6">
+            <label for="mockJobRole" class="form-label fw-semibold">Target Job Role <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="mockJobRole" 
+                   value="{{ profile.target_role if profile else 'Software Development Engineer' }}" 
+                   placeholder="e.g. Full Stack Engineer, Java Developer, Python Specialist" required>
+          </div>
+
+          <div class="col-md-3">
+            <label for="mockInterviewType" class="form-label fw-semibold">Interview Type</label>
+            <select class="form-select" id="mockInterviewType">
+              <option value="Technical" selected>Technical</option>
+              <option value="HR">HR & Behavioral</option>
+            </select>
+          </div>
+
+          <div class="col-md-3">
+            <label for="mockDifficulty" class="form-label fw-semibold">Difficulty</label>
+            <select class="form-select" id="mockDifficulty">
+              <option value="Beginner" selected>Beginner (Campus)</option>
+              <option value="Intermediate">Intermediate</option>
+              <option value="Advanced">Advanced</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="bg-light p-3 rounded-3 border mb-4">
+          <div class="d-flex align-items-center justify-content-between">
+            <div class="small">
+              <strong class="text-dark">Candidate:</strong> {{ profile.full_name if profile else "Student Candidate" }} 
+              &bull; <strong class="text-dark">College:</strong> {{ profile.college if profile else "University" }}
+              &bull; <strong class="text-dark">Total Rounds:</strong> 5 Questions
+            </div>
+            <a href="{{ url_for('profile') }}" class="btn btn-sm btn-link text-decoration-none">Change Profile</a>
+          </div>
+        </div>
+
+        <div class="text-end">
+          <button type="button" class="btn btn-primary-custom btn-lg" id="startMockBtn">
+            <i class="bi bi-play-fill me-2"></i>Start Mock Interview (5 Questions)
+          </button>
+        </div>
+      </div>
+
+      <!-- STEP 2: Active Session Card (One question at a time) -->
+      <div id="mockActiveCard" class="card card-custom p-4 mb-4" style="display: none;">
+        
+        <!-- Progress bar -->
+        <div class="mb-4">
+          <div class="d-flex justify-content-between align-items-center mb-1">
+            <span class="small fw-bold text-primary" id="mockProgressText">Question 1 of 5</span>
+            <span class="small text-muted"><i class="bi bi-cpu me-1"></i>Powered by IBM Granite</span>
+          </div>
+          <div class="progress" style="height: 8px;">
+            <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary" 
+                 id="mockProgressBar" role="progressbar" style="width: 20%;"></div>
+          </div>
+        </div>
+
+        <div id="mockSessionAlert"></div>
+
+        <!-- Question Display Header -->
+        <div class="border-bottom pb-3 mb-3">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="question-badge" id="mockQuestionNumberBadge">Question 1</span>
+            <div class="d-flex gap-2">
+              <span class="badge bg-light text-dark border" id="mockCategoryBadge">Technical</span>
+              <button class="btn btn-sm btn-outline-secondary py-0 px-2" onclick="readActiveQuestion()">
+                <i class="bi bi-volume-up me-1"></i> Listen
+              </button>
+            </div>
+          </div>
+          <h4 class="fw-bold text-dark mt-2 mb-0" id="mockQuestionText">
+            Loading question...
+          </h4>
+        </div>
+
+        <!-- Student Answer Field -->
+        <div class="mb-4">
+          <label for="mockAnswerInput" class="form-label fw-semibold">Your Response <span class="text-danger">*</span></label>
+          <textarea class="form-control" id="mockAnswerInput" rows="5" 
+                    placeholder="Structure your answer clearly. Explain concepts, edge cases, or relevant project decisions..."></textarea>
+          <small class="text-muted">Take your time. Once submitted, IBM Granite will evaluate your answer.</small>
+        </div>
+
+        <!-- Actions -->
+        <div class="d-flex justify-content-between align-items-center">
+          <button type="button" class="btn btn-outline-danger btn-sm" onclick="abandonSession()">
+            <i class="bi bi-x-circle me-1"></i> Exit Session
+          </button>
+          
+          <div class="d-flex gap-2">
+            <button type="button" class="btn btn-primary-custom" id="mockSubmitAnswerBtn">
+              <i class="bi bi-send-check-fill me-1"></i> Submit Answer
+            </button>
+            <button type="button" class="btn btn-success" id="mockNextQuestionBtn" style="display: none;">
+              <i class="bi bi-arrow-right-circle me-1"></i> Next Question
+            </button>
+          </div>
+        </div>
+
+        <!-- Inline Question Feedback Card (Revealed after submission) -->
+        <div id="mockFeedbackContainer" class="mt-4 pt-3 border-top" style="display: none;">
+          <h5 class="fw-bold text-dark mb-2"><i class="bi bi-chat-left-dots-fill text-primary me-2"></i>Granite Evaluation & Feedback</h5>
+          
+          <div class="card bg-light border p-3 mb-3">
+            <div class="small fw-semibold text-dark mb-1">Constructive Feedback:</div>
+            <p class="text-muted small mb-2" id="mockFbOverall"></p>
+            
+            <div class="small fw-semibold text-danger mb-1">Concepts to Mention:</div>
+            <ul class="mb-2 ps-3" id="mockFbMissing"></ul>
+
+            <div class="small fw-semibold text-success mb-1">Model Answer Example:</div>
+            <div class="sample-answer-box text-dark small" id="mockFbImproved"></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- STEP 3: Final Comprehensive Summary Card (End of interview) -->
+      <div id="mockSummaryCard" class="card card-custom p-4 text-start" style="display: none;">
+        <div class="text-center mb-4">
+          <div class="step-circle bg-success-subtle text-success fs-3 mb-2" style="width: 60px; height: 60px;">
+            <i class="bi bi-check-lg"></i>
+          </div>
+          <h3 class="fw-bold text-dark">Mock Interview Complete!</h3>
+          <p class="text-muted small">Your session has been securely recorded to the SQLite interview database.</p>
+        </div>
+
+        <!-- Holistic Summary -->
+        <div class="card bg-light border p-3 mb-4">
+          <h5 class="fw-bold text-dark mb-2"><i class="bi bi-file-earmark-text-fill text-primary me-2"></i>Comprehensive Performance Review</h5>
+          <p class="text-muted mb-0" id="finalSummaryText"></p>
+        </div>
+
+        <div class="row g-3 mb-4">
+          <div class="col-md-6">
+            <div class="card card-custom p-3 h-100 border-success">
+              <h6 class="fw-bold text-success mb-2"><i class="bi bi-shield-check me-2"></i>Demonstrated Strengths</h6>
+              <ul class="list-unstyled small mb-0 ps-1" id="finalStrengthsList"></ul>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="card card-custom p-3 h-100 border-primary">
+              <h6 class="fw-bold text-primary mb-2"><i class="bi bi-graph-up me-2"></i>Priority Improvement Areas</h6>
+              <ul class="list-unstyled small mb-0 ps-1" id="finalImprovementsList"></ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Final Encouraging Advice -->
+        <div class="responsible-ai-banner mb-4">
+          <h6 class="fw-bold mb-1"><i class="bi bi-compass-fill text-primary me-1"></i> Road to Campus Placement</h6>
+          <p class="mb-0 small text-muted" id="finalAdviceText"></p>
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div class="d-flex justify-content-between align-items-center pt-3 border-top">
+          <a href="{{ url_for('mock_interview') }}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-repeat me-1"></i> Start Another Session
+          </a>
+          <div class="d-flex gap-2">
+            <a href="#" id="viewHistoryDetailLink" class="btn btn-primary-custom">
+              <i class="bi bi-journal-text me-1"></i> View Full Transcript
+            </a>
+            <a href="{{ url_for('history') }}" class="btn btn-outline-custom">
+              All Interview History &rarr;
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+function readActiveQuestion() {
+  const text = document.getElementById("mockQuestionText").innerText;
+  if (text) speakText(text);
+}
+
+function abandonSession() {
+  if (confirm("Are you sure you want to exit this mock interview session? Your progress on this attempt will end.")) {
+    window.location.reload();
+  }
+}
+</script>
+{% endblock %}

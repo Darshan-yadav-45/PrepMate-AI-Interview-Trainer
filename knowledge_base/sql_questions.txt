@@ -1,0 +1,33 @@
+[Topic: SQL Queries and Joins]
+Question: Explain the differences between INNER JOIN, LEFT JOIN, RIGHT JOIN, and FULL OUTER JOIN with examples.
+Key Concepts: Relational algebra, Cartesian product, matching keys, NULL handling in non-matching rows.
+Evaluation Criteria:
+- INNER JOIN: Returns only rows that have matching values in both tables.
+- LEFT JOIN: Returns all rows from the left table, and matched rows from the right table; unmatched right columns are NULL.
+- RIGHT JOIN: Returns all rows from the right table, and matched rows from the left table.
+- FULL OUTER JOIN: Combines results of both left and right joins; rows without a match on either side contain NULLs.
+
+[Topic: SQL Aggregation and Window Functions]
+Question: What is the difference between GROUP BY and Window Functions (like ROW_NUMBER, RANK, DENSE_RANK)?
+Key Concepts: Aggregation collapsing rows vs Window functions keeping original row granularity, OVER (PARTITION BY ... ORDER BY ...), RANK vs DENSE_RANK gap handling.
+Evaluation Criteria:
+- GROUP BY collapses multiple rows into a single summary row per group.
+- Window functions compute values over a sliding or partitioned set of rows while preserving each individual row.
+- ROW_NUMBER gives sequential integer without ties.
+- RANK assigns same rank to ties and skips subsequent ranks; DENSE_RANK assigns same rank to ties without skipping.
+
+[Topic: SQL Indexing and Performance]
+Question: What is an index in SQL, how does a B-Tree index work, and what are the trade-offs of indexing?
+Key Concepts: Clustered index vs Non-clustered index, B-Tree data structure, lookup cost vs write overhead (INSERT/UPDATE/DELETE performance hit).
+Evaluation Criteria:
+- Clustered index dictates the physical sorting of table rows (only one per table, usually primary key).
+- Non-clustered index creates a separate lookup structure with pointers to the data rows.
+- Trade-offs: Speeds up SELECT queries with WHERE/JOIN/ORDER BY clauses, but slows down data modification operations (INSERT, UPDATE, DELETE) and consumes extra storage space.
+
+[Topic: SQL Subqueries vs CTEs]
+Question: What is a Common Table Expression (CTE) and how does it compare to Subqueries and Temporary Tables?
+Key Concepts: WITH clause, recursive CTEs, readability, query optimizer behavior, scope of CTE (single statement execution).
+Evaluation Criteria:
+- CTE enhances readability and modularity of complex multi-step queries.
+- Recursive CTEs enable traversal of hierarchical and graph structures (e.g., employee-manager hierarchy).
+- Subqueries can be correlated or uncorrelated; CTEs are often treated similarly by modern optimizers.
