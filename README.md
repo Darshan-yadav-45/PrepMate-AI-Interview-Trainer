@@ -312,24 +312,8 @@ IBM Cloud Code Engine runs serverless web apps directly from container images or
 
 ---
 
-## 10. Final Academic PPT Screenshots Checklist
-
-For the final project presentation under AICTE–IBM SkillsBuild University Engagements 2026:
-
-- [ ] **Slide 1 - Landing Page (Hero):** Showing PrepMate branding, AICTE–IBM SkillsBuild badge, and "Your Personal AI Interview Coach" hero section.
-- [ ] **Slide 2 - Candidate Profile Setup:** Form filled with candidate education, college, programming languages, and capstone project details.
-- [ ] **Slide 3 - IBM Granite Model Status:** Showing the navbar pill indicating live IBM Granite connection (`ibm/granite-3-8b-instruct`).
-- [ ] **Slide 4 - AI Question Generator:** Displaying generated questions customized to candidate profile, with category badges and interviewer objectives.
-- [ ] **Slide 5 - AI Answer Evaluator (4 Dimensions):** Showing the 4-dimension metric cards (Relevance, Technical Correctness, Clarity, Completeness) and omitted concepts.
-- [ ] **Slide 6 - Improved Model Answer:** Showing the AI-recommended benchmark answer and actionable improvement suggestions.
-- [ ] **Slide 7 - Interactive Mock Interview:** Displaying an active question, progress bar (`Question 2 of 5`), and the Web Speech audio button.
-- [ ] **Slide 8 - Mock Interview Final Appraisal:** Showing session summary, key strengths, priority growth areas, and career placement advice.
-- [ ] **Slide 9 - SQLite Interview History & Transcript:** Showing the past interview sessions table and full session review page (`/history/<id>`).
-- [ ] **Slide 10 - Pytest Automated Test Results:** Showing all 10 automated test cases passing in the terminal.
-
----
-
-## 11. Academic Attribution & License
+## 10
+. Academic Attribution & License
 
 - **Programme:** AICTE–IBM SkillsBuild University Engagements 2026
 - **Problem Statement:** No. 22 – Interview Trainer Agent
